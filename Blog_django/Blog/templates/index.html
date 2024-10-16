@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Cards</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        .card p {
+            color: #4e4d4d;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 3;
+        }
+        h1{
+            color:darkred; 
+            font-size: 30px;
+            display:inline-block;
+            margin-top: 20px;   
+            padding-left: 30px;  
+            margin-bottom: 0px;
+        }
+        .form-inline{
+            padding-left: 1040px;
+            margin-bottom: 7px;    
+        }
+        input[type="search"]{
+            height:25px;
+        }
+        section{
+        
+            border-radius: 5px;
+            margin-top: 5px;
+            margin-left: 10px;
+            margin-right: 10px;
+        }
+        .card:hover{
+            transform: scale(1.1);
+            transition-duration: 1s;
+        }
+        
+    </style>
+</head>
+<body>
+    <section>
+               
+     <nav class="navbar">
+        
+        <h1>Blog</h1>
+        <form mathod="get" class="form-inline">
+            <input type="search" name="search" placeholder="Search">
+            <button type="submit">Search</button>
+        </form>
+        <div id="div">
+            <a href="/Add-post/">Add Post</a>
+            <a href="/home/">Home</a>    
+        </div>
+     </nav>
+    </section>
+
+    
+<div class="container">
+    {% for n in PostData %}
+    <div class="card">
+        {% if n.image %}
+        <img src="{{n.image.url}}" alt="Blog Post Image">
+        {% endif %}
+        <h2>{{n.title}}</h2>
+        <p>{{n.des}}</p>
+        <a href="{% url 'detailspage' n.id %}" class="read-more">Read more</a>   
+    </div>
+
+    {% empty %}
+    No Data Found
+    {% endfor %}
+</div>
+
+    <div class="pagination">
+        <span class="step-links">
+            {% if PostData.has_previous %}
+                <a href="/?page={{ PostData.first_page_number }}"> &laquo; first</a>
+                <a href="/?page={{ PostData.previous_page_number }}"> &laquo; previous</a>
+            {% endif %}
+    
+            {% for v in totalpagelist %}
+                
+            
+                <a class="page-link" href="/?page={{v}}">{{v}}</a>
+            
+            {% endfor %}
+
+            {% if PostData.has_next %}
+                <a href="/?page={{ PostData.next_page_number }}">next &raquo;</a>
+                <a href="/?page={{ PostData.paginator.num_pages }}">last &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+</body>
+</html>

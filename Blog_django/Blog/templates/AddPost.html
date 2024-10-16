@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/static/addpost.css">
+    <style>
+        form{
+            background-color: rgba(11, 108, 108, 0.754);
+            color:beige;
+        }
+        body{
+            background-color: rgba(255, 228, 196, 0.408);   
+        }
+        button{
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+    
+<div>
+    <h1>Add Blog</h1>
+    <form method="POST" action="/Add-post/">
+        {% csrf_token %}
+    
+            <label for="">Blog Title</label>
+            <input type="text" name="Blog_Title"  placeholder="Enter Blog title" required >
+        
+            <label for="image">Upload img</label>
+            <input name="Blog_image" type="file" placeholder="Choose File">
+        
+            <label for="">Content:</label>
+            <br>
+            <textarea name="Blog_des"cols="58" rows="7" placeholder="Message.." name="message" required></textarea>
+
+            <button type="submit">Submit</button>
+        
+        </form>
+    </div>  
+
+</body>
+</html>

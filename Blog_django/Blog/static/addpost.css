@@ -1,0 +1,38 @@
+h1{
+    text-align: center;
+    color:crimson;
+    font-size: 35px;
+ }
+form {
+     font-family: Arial, sans-serif;
+     max-width: 450px;
+     margin: 0 auto;
+     padding: 20px;
+     border-radius: 7px;
+     box-shadow: 0 2px 5px rgb(227, 183, 3);
+     font-size: 20px;
+     text-align: left;
+     height: 310px;
+     border:1px solid black
+     
+ }
+input{
+     width: 415px;
+     padding: 9px 10px;
+     margin: 8px 0;  
+     border-radius: 5px;
+ }
+
+button{
+     background-color:rgb(55, 103, 103);
+     width:70px;
+     height: 30px;
+     float:right;
+     color:aliceblue;
+     margin:40px;
+     border-radius: 5px;
+ }  
+textarea{
+     border-radius: 5px;
+ }
+

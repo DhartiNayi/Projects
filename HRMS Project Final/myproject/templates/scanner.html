@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance Scanner</title>
+</head>
+<body>
+    <h1>Attendance Scanner</h1>
+    <video id="cameraFeed" width="400" height="300" autoplay></video>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
+    <script>
+       
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(function(stream) {
+                var video = document.getElementById('cameraFeed');
+                video.srcObject = stream;
+                video.play();
+            })
+            .catch(function(err) {
+                console.error('Error accessing camera: ', err);
+            });
+
+        
+        Quagga.init({
+            inputStream: {
+                name: 'Live',
+                type: 'LiveStream',
+                target: document.querySelector('#cameraFeed'),
+                constraints: {
+                    width: 400,
+                    height: 300,
+                    facingMode: 'environment'
+                }
+            },
+            decoder: {
+                readers: ['ean_reader']
+            }
+        }, function(err) {
+            if (err) {
+                console.error('Quagga initialization failed: ', err);
+                return;
+            }
+            Quagga.start();
+        });
+
+       
+        Quagga.onDetected(function(result) {
+            var code = result.codeResult.code;
+            window.location.href = '/attendance/form?employee_id=' + code;
+        });
+    </script>
+</body>
+</html>

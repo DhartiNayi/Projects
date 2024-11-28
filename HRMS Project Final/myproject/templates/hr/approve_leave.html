@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Approve Leave</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .navbar-toggler {
+            margin-left: auto;
+        }
+
+        .sidebar {
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: -250px;
+            width: 250px;
+            background-color: #57578f;
+            padding-top: 60px;
+            transition: left 0.3s ease;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .sidebar.active {
+            left: 0;
+        }
+
+        .sidebar a {
+            padding: 15px;
+            display: block;
+            color: #fff;
+            text-decoration: none;
+            font-size: 1.1em;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .sidebar a:hover {
+            background-color: rgb(255, 255, 0);
+            color: #766e6e;
+        }
+
+        .content {
+            margin-left: 0;
+            padding: 20px;
+            transition: margin-left 0.3s ease;
+        }
+
+        .sidebar-header {
+            color: #fff;
+            padding: 15px;
+            font-size: 1.2em;
+            border-bottom: 1px solid #495057;
+        }
+
+        @media (min-width: 768px) {
+            .sidebar {
+                left: 0;
+                width: 250px;
+            }
+
+            .sidebar.active {
+                left: -250px;
+            }
+
+            .content {
+                margin-left: 250px;
+            }
+
+            .content.active {
+                margin-left: 0;
+            }
+        }
+
+        header nav .nav-item a:hover {
+            background-color: rgb(255, 255, 0);
+            color: #000000;
+            border: 1px solid rgb(255, 255, 0);
+            border-radius: 2px;
+        }
+
+        header nav {
+            background-color: #000000;
+        }
+
+        header nav .container-fluid .nav-link {
+            color: #fff;
+        }
+
+        header nav .container-fluid .navbar-brand {
+            color: #fff;
+        }
+
+        footer {
+            background-color: #dcc9c9;
+            text-align: center;
+            line-height: 60px;
+            padding: 10px 0;
+            margin-left: 250px;
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg fixed-top">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">HRMS Management</a>
+                <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container-fluid mt-5">
+        <button class="navbar-toggler ms-auto" type="button" onclick="toggleSidebar()">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </div>
+
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">HRMS Management</div>
+        <a href="{% url 'home' %}" class="home">Home</a>
+        <a href="{% url 'hr_dashboard' %}">Dashboard</a>
+        <a href="{% url 'hr_employee_details' %}">Employee</a>
+        <a href="{% url 'hr_attendance_details' %}">Attendance</a>
+        <a href="{% url 'hr_apply_leave_details' %}">Leave</a>
+    </div>
+
+    <div class="content" id="content">
+        <div class="container">
+            <div class="card">
+                <div class="card-header">
+                    Edit Employee Leave Request
+                </div>
+                <form id="editLeaveForm" method="POST">
+                    {% csrf_token %}
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Name:</label>
+                            <input type="text" class="form-control" id="name" name="name" value="{{ employee_name }}" readonly>
+                        </div>
+                        <div class="input-container">
+                            <label for="designation" class="form-label">Employee Designation</label>
+                            <select id="designation" class="form-select" name="designation">
+                                <option value="Frontend Developer" {% if leave.designation == "Frontend Developer" %}selected{% endif %}>Frontend Developer</option>
+                                <option value="Backend Developer" {% if leave.designation == "Backend Developer" %}selected{% endif %}>Backend Developer</option>
+                                <option value="QA(Quality Assurance)" {% if leave.designation == "QA(Quality Assurance)" %}selected{% endif %}>QA(Quality Assurance)</option>
+                                <option value="Mern stack Developer" {% if leave.designation == "Mern stack Developer" %}selected{% endif %}>Mern stack Developer</option>
+                                <option value="UI/UX developer" {% if leave.designation == "UI/UX developer" %}selected{% endif %}>UI/UX developer</option>
+                            </select>
+                        </div>
+                        <br>
+                        <div class="mb-3">
+                            <label for="leave-type" class="form-label">Leave Type:</label>
+                            <select class="form-select" id="leave-type" name="leave-type">
+                                <option value="Casual Leave" {% if leave.leave_type == "Casual Leave" %}selected{% endif %}>Casual Leave</option>
+                                <option value="Sick Leave" {% if leave.leave_type == "Sick Leave" %}selected{% endif %}>Sick Leave</option>
+                                <option value="Marriage Leave" {% if leave.leave_type == "Marriage Leave" %}selected{% endif %}>Marriage Leave</option>
+                                <option value="Annual Leave" {% if leave.leave_type == "Annual Leave" %}selected{% endif %}>Annual Leave</option>
+                                <option value="Emergency Leave" {% if leave.leave_type == "Emergency Leave" %}selected{% endif %}>Emergency Leave</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="duration" class="form-label">Duration:</label>
+                            <input type="number" class="form-control" id="duration" name="duration" value="{{ leave.duration }}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="start-date" class="form-label">Start Date:</label>
+                            <input type="date" class="form-control" id="start-date" name="start-date" value="{{ leave.start_date|date:'Y-m-d' }}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="end-date" class="form-label">End Date:</label>
+                            <input type="date" class="form-control" id="end-date" name="end-date" value="{{ leave.end_date|date:'Y-m-d' }}">
+                        </div>
+                        <div class="text-center">
+                            <button type="button" class="btn btn-success" id="approveLeave">Approve</button>
+                        </div>
+                        <div class="text-center">
+                            <button type="button" class="btn btn-warning" id="editBtn">Reject</button>
+                        </div>
+                        <div class="text-center">
+                            <button type="button" class="btn btn-danger" id="editBtn">Cancel</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <br>
+    <br>
+    <br>
+    <br>
+
+    <footer class="footer mt-auto py-3 fixed-bottom">
+        <div class="container">
+            <span class="text-muted">&copy; 2024 HRMS Management</span>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+        function toggleSidebar() {
+            var sidebar = document.getElementById('sidebar');
+            var content = document.getElementById('content');
+
+            sidebar.classList.toggle('active');
+            content.classList.toggle('active');
+        }
+
+        $(document).ready(function() {
+            $('#editBtn').click(function() {
+                var formData = $('#editLeaveForm').serialize();
+
+                $.ajax({
+                    type: 'POST',
+                    url: '{% url "do_edit_leave" leave.id %}',
+                    data: formData,
+                    success: function(response) {
+                        if (response.success) {
+                            alert(response.message);
+                            window.location.href = '{% url "apply_leave_details" %}';
+                        } else {
+                            alert(response.message);
+                        }
+                    },
+                    error: function(xhr, errmsg, err) {
+                        console.log(xhr.status + ": " + xhr.responseText);
+                        alert("An error occurred. Please try again.");
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

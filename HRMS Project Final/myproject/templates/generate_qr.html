@@ -1,0 +1,215 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Qr Generator</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins' , sans-serif;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #262a2f;
+        }
+
+        .container {
+            width: 400px;
+            padding: 25px 35px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50% , -50%);
+            background-color: #fff;
+            border-radius: 10px;
+        }
+
+        .container p {
+            font-weight: 600;
+            font-size: 25px;
+            margin-bottom: 8px;
+            text-align: center;
+
+        }
+
+        .container input {
+            width: 100%;
+            height: 50px;
+            border: 1px solid #494eea;
+            outline: 0;
+            padding: 10px;
+            margin: 10px 0 20px;
+            border-radius: 5px;
+        }
+
+        .container button {
+            width: 100%;
+            height: 50px;
+            background-color: #494eea;
+            color: #fff;
+            border: 0;
+            outline: 0;
+            border-radius: 5px;
+            box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            margin: 20px 0;
+            font-weight: 500; 
+        }
+
+        .container #imgBox {
+            border: 1px solid rgb(129, 125, 125);
+            border-radius: 5px;
+            padding: 10px;
+            text-align: center;
+            overflow: hidden;
+        }  
+
+        img {
+            opacity: 0;
+            transition: opacity 1.5s;
+        }
+
+        .fade-in {
+            opacity: 1;
+        }
+
+    </style>
+</head>
+<body>
+    
+    <div class="container">
+        <p>Qr Code Generator</p>
+        <input type="text" placeholder="Texr or URL" id="qrText">
+
+        <div id="imgBox">
+            <img src="" id="qrImage">
+        </div>
+
+        <button onclick="generateQR()">Generate Qr Code</button>
+    </div>
+
+    <script>
+        let imgBox = document.getElementById("imgBox");
+        let qrImage = document.getElementById("qrImage");
+        let qrText = document.getElementById("qrText");
+
+        function generateQR() {
+            qrImage.src = "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=" + qrText.value;
+
+            qrImage.onload = function() {
+                qrImage.classList.add("fade-in");
+            }
+        }
+    </script>
+
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Qr Generator</title>
+    <!-- <link rel="stylesheet" href="style.css"> -->
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins' , sans-serif;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #262a2f;
+        }
+
+        .container {
+            width: 400px;
+            padding: 25px 35px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50% , -50%);
+            background-color: #fff;
+            border-radius: 10px;
+        }
+
+        .container p {
+            font-weight: 600;
+            font-size: 25px;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+
+        .container button {
+            width: 100%;
+            height: 50px;
+            background-color: #494eea;
+            color: #fff;
+            border: 0;
+            outline: 0;
+            border-radius: 5px;
+            box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            margin: 20px 0;
+            font-weight: 500; 
+        }
+
+        .container #imgBox {
+            border: 1px solid rgb(129, 125, 125);
+            border-radius: 5px;
+            padding: 10px;
+            text-align: center;
+            overflow: hidden;
+        }  
+
+        img {
+            opacity: 0;
+            transition: opacity 1.5s;
+        }
+
+        .fade-in {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="container">
+        <p>QR Code for Attendance</p>
+
+        <div id="imgBox">
+            <img src="" id="qrImage">
+        </div>
+
+        <button onclick="generateQR()">Generate QR Code</button>
+    </div>
+
+    <script>
+        const userId = "{{ user.id }}";  // Django template tag to get user ID
+        const localIpAddress = "192.168.29.207";  // Your local IP address
+        const port = "8000";  // The port your Django server is running on
+        const baseUrl = "{% url 'employee_addattendance' %}";  // Django template tag to get the URL for addattendance view
+        const attendanceURL = `http://${localIpAddress}:${port}${baseUrl}?user_id=${userId}`;
+        const qrImage = document.getElementById("qrImage");
+
+        function generateQR() {
+            qrImage.src = "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=" + encodeURIComponent(attendanceURL);
+
+            qrImage.onload = function() {
+                qrImage.classList.add("fade-in");
+            }
+        }
+
+        // Automatically generate QR code on page load
+        window.onload = generateQR;
+    </script>
+
+</body>
+</html>
